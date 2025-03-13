@@ -18,4 +18,7 @@ public class Constants {
     public static final String IMAGE_SUFFIX = ".png";
     public static final String COVER_IMAGE_SUFFIX = ".png";
     public static final String APPLY_INFO_TEMPLATE = "我是%s";
+    public static final String APP_UPDATE_FOLDER = "/update/";
+    public static final String APP_EXE_SUFFIX = ".exe";
+    public static final String APP_NAME = "chatchat_setup";
 }
