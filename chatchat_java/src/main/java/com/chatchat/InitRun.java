@@ -1,6 +1,7 @@
 package com.chatchat;
 
 import com.chatchat.redis.RedisUtils;
+import com.chatchat.websocket.netty.NettyWebSocketStarter;
 import org.apache.ibatis.session.SqlSessionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,15 @@ public class InitRun implements ApplicationRunner {
     @Resource
     private RedisUtils redisUtils;
 
+    @Resource
+    private NettyWebSocketStarter nettyWebSocketStarter;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         try {
             dataSource.getConnection();
             redisUtils.get("test");
+            new Thread(nettyWebSocketStarter).start();
             logger.info("服务启动成功，可以继续进行开发啦!!!");
         }catch (SQLException e){
             logger.error("数据库配置错误，请检测数据库配置");

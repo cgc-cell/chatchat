@@ -21,4 +21,8 @@ public class Constants {
     public static final String APP_UPDATE_FOLDER = "/update/";
     public static final String APP_EXE_SUFFIX = ".exe";
     public static final String APP_NAME = "chatchat_setup";
+    public static final Long REDIS_KEY_EXPIRES_HEART_BEAT=600L;
+    public static final String REDIS_KEY_USER_CONTACT = "chatchat:ws:user:contact";
+    public static final Long REDIS_KEY_TOKEN_EXPIRES=Constants.VERIFY_CODE_TIME_DAY* 5L;
+    public static final Long MILLISECOND_3DAY_AGO =365*24*60*60*1000L;
 }

@@ -2,31 +2,37 @@ package com.chatchat.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
 import com.chatchat.constants.Constants;
 import com.chatchat.entity.config.AppConfig;
+import com.chatchat.entity.dto.MessageSendDto;
 import com.chatchat.entity.dto.TokenUserInfoDto;
 import com.chatchat.entity.enums.*;
+import com.chatchat.entity.po.ChatSessionUser;
+import com.chatchat.entity.po.UserContact;
 import com.chatchat.entity.po.UserInfoBeauty;
-import com.chatchat.entity.query.UserInfoBeautyQuery;
+import com.chatchat.entity.query.*;
 import com.chatchat.entity.vo.UserInfoVO;
 import com.chatchat.exception.BusinessException;
+import com.chatchat.mappers.UserContactMapper;
 import com.chatchat.mappers.UserInfoBeautyMapper;
 import com.chatchat.redis.RedisComponent;
 import com.chatchat.redis.RedisUtils;
+import com.chatchat.service.ChatSessionUserService;
+import com.chatchat.service.UserContactService;
 import com.chatchat.utils.CopyTools;
 import jodd.util.ArraysUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.chatchat.entity.query.UserInfoQuery;
 import com.chatchat.entity.po.UserInfo;
 import com.chatchat.entity.vo.PaginationResultVO;
-import com.chatchat.entity.query.SimplePage;
 import com.chatchat.mappers.UserInfoMapper;
 import com.chatchat.service.UserInfoService;
 import com.chatchat.utils.StringTools;
@@ -52,6 +58,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     private RedisUtils redisUtils;
 	@Resource
 	private RedisComponent redisComponent;
+    @Autowired
+    private UserContactMapper<UserContact,UserContactQuery> userContactMapper;
+
+	@Resource
+	private UserContactService userContactService;
+	@Resource
+	private ChatSessionUserService chatSessionUserService;
 
 	/**
 	 * 根据条件查询列表
@@ -211,7 +224,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 			this.userInfoBeautyMapper.updateById(beautyAccount,beautyAccount.getId());
 		}
 
-		//TODO 创建机器人好友
+		// 创建机器人好友
+		userContactService.addContact2Robot(userID);
 	}
 
 	@Override
@@ -224,8 +238,16 @@ public class UserInfoServiceImpl implements UserInfoService {
 			throw new BusinessException("该账户已被禁用！");
 		}
 
-		//TODO 查询我的群组
-		//TODO 查询我的联系人
+		// 查询我的联系人
+		UserContactQuery userContactQuery=new UserContactQuery();
+		userContactQuery.setUserId(userInfo.getUserId());
+		userContactQuery.setStatus(UserContactStatusEnum.FRIEND.getStatus());
+		List<UserContact> contactList=userContactMapper.selectList(userContactQuery);
+		List<String> contactIdList=contactList.stream().map(UserContact::getContactId).collect(Collectors.toList());
+		redisComponent.clearUserContact(userInfo.getUserId());
+		if(!contactIdList.isEmpty()) {
+			redisComponent.addUserContactBatch(userInfo.getUserId(),contactIdList);
+		}
 
 		TokenUserInfoDto tokenUserInfoDto=getTokenUserInfoDto(userInfo);
 
@@ -267,7 +289,15 @@ public class UserInfoServiceImpl implements UserInfoService {
 		if(!dbUserInfo.getNickName().equals(userInfo.getNickName())) {
 			contactNameUpdate=userInfo.getNickName();
 		}
-		//TODO 更新会话中的昵称信息
+		if(contactNameUpdate==null) {
+			return;
+		}
+		TokenUserInfoDto tokenUserInfoDto=redisComponent.getTokenUserInfoDtoByUserId(userInfo.getUserId());
+		tokenUserInfoDto.setNickName(contactNameUpdate);
+		redisComponent.saveTokenUserInfoDto(tokenUserInfoDto);
+		//更新会话中的昵称信息
+		this.chatSessionUserService.updateContactName(contactNameUpdate, userInfo.getUserId());
+
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.chatchat.controller;
 
 import com.chatchat.annotation.GlobalInterceptor;
 import com.chatchat.constants.Constants;
+import com.chatchat.entity.dto.MessageSendDto;
 import com.chatchat.entity.dto.TokenUserInfoDto;
 import com.chatchat.entity.po.UserInfo;
 import com.chatchat.entity.vo.ResponseVO;
@@ -11,6 +12,7 @@ import com.chatchat.redis.RedisComponent;
 import com.chatchat.redis.RedisUtils;
 import com.chatchat.service.UserInfoService;
 import com.chatchat.utils.CopyTools;
+import com.chatchat.websocket.MessageHandler;
 import com.wf.captcha.ArithmeticCaptcha;
 import com.wf.captcha.utils.CaptchaUtil;
 import org.apache.catalina.User;
@@ -42,6 +44,9 @@ public class AccountController extends ABaseController {
 
     @Resource
     private RedisComponent redisComponent;
+
+    @Resource
+    private MessageHandler messageHandler;
 
     @RequestMapping("/checkCode")
     public ResponseVO checkCaptcha(HttpServletRequest request) {
@@ -96,4 +101,16 @@ public class AccountController extends ABaseController {
     public ResponseVO getSystemSetting() {
         return getSuccessResponseVO(redisComponent.getSysSetting());
     }
+
+
+    @RequestMapping("/test")
+    public ResponseVO test() {
+
+        MessageSendDto messageSendDto=new MessageSendDto();
+        messageSendDto.setMessageContent("sdfkjaskdjfjkasdjfkals"+System.currentTimeMillis());
+        messageHandler.sendMessage(messageSendDto);
+        return getSuccessResponseVO(null);
+    }
+
+
 }

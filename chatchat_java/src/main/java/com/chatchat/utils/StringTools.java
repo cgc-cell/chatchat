@@ -3,11 +3,13 @@ import com.chatchat.constants.Constants;
 import com.chatchat.entity.enums.UserContactTypeEnum;
 import com.chatchat.exception.BusinessException;
 import jodd.util.RandomString;
+import jodd.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -72,5 +74,25 @@ public class StringTools {
     }
     public static String encodeMD5(String str) {
         return StringTools.isEmpty(str)?null:DigestUtils.md5Hex(str);
+    }
+    public static String cleanHtmlTag(String content) {
+        if(isEmpty(content)){
+            return content;
+        }
+        content = content.replace("<", "&lt;");
+        content = content.replace(">", "&gt;");
+        content = content.replace("\n\r","<br>");
+        content = content.replace("\n","<br>");
+        content = content.replace("\r","<br>");
+        return content;
+    }
+
+    public static String getChatSessionId4User(String[] userIds) {
+        Arrays.sort(userIds);
+        return encodeMD5(StringUtil.join(userIds,","));
+    }
+
+    public static String getChatSessionId4Group(String groupId) {
+        return encodeMD5(groupId);
     }
 }
