@@ -7,6 +7,7 @@ import jodd.util.StringUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import javax.validation.constraints.NotEmpty;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -94,5 +95,21 @@ public class StringTools {
 
     public static String getChatSessionId4Group(String groupId) {
         return encodeMD5(groupId);
+    }
+
+    public static String getFileSuffix(String fileName) {
+        if (isEmpty(fileName)) {
+            return null;
+        }
+        return fileName.substring(fileName.lastIndexOf("."));
+    }
+
+    public static boolean isNumber(@NotEmpty String str) {
+        String checkStr = "^[0-9]+$";
+        if(isEmpty(str)){
+            return false;
+        }
+        return str.matches(checkStr);
+
     }
 }

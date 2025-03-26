@@ -9,7 +9,7 @@ public enum MessageTypeEnum {
     GROUP_CREATE(3,"群组已经创建好了，可以和好友一起畅聊了","群创建消息"),
     CONTACT_APPLY(4,"","好友申请"),
     MEDIA_CHAT(5,"","媒体文件"),
-    FILE_UPLOAD(6,"","文件上传完成"),
+    FILE_UPLOADED(6,"","文件上传完成"),
     FORCE_OFFlINE(7,"","强制下线"),
     DISSOLUTION_GROUP(8,"群聊已解散","解散群聊"),
     ADD_GROUP(9,"%s加入了群组","加入群组"),
@@ -48,10 +48,10 @@ public enum MessageTypeEnum {
             return null;
         }
     }
-    public static UserStatusEnum getByType(Integer type) {
+    public static MessageTypeEnum getByType(Integer type) {
         try {
-            for (UserStatusEnum item : UserStatusEnum.values()) {
-                if(item.getStatus().equals(type)) {
+            for (MessageTypeEnum item : MessageTypeEnum.values()) {
+                if(item.getType().equals(type)) {
                     return item;
                 }
             }

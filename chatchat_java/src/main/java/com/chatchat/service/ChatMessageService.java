@@ -1,10 +1,16 @@
 package com.chatchat.service;
 
+import java.io.File;
 import java.util.List;
 
+import com.chatchat.entity.dto.MessageSendDto;
+import com.chatchat.entity.dto.TokenUserInfoDto;
 import com.chatchat.entity.query.ChatMessageQuery;
 import com.chatchat.entity.po.ChatMessage;
 import com.chatchat.entity.vo.PaginationResultVO;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotNull;
 
 
 /**
@@ -69,4 +75,9 @@ public interface ChatMessageService {
 	 */
 	Integer deleteChatMessageByMessageId(Long messageId);
 
+    MessageSendDto saveMessage(ChatMessage chatMessage, TokenUserInfoDto tokenUserInfoDto);
+
+	void saveMessageFile(String userId,Long messageId, MultipartFile file, MultipartFile cover);
+
+	File downloadFile(TokenUserInfoDto tokenUserInfoDto,Long fileId,Boolean showCover);
 }
