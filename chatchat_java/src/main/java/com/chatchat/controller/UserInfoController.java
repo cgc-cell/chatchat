@@ -10,6 +10,7 @@ import com.chatchat.exception.BusinessException;
 import com.chatchat.service.UserInfoService;
 import com.chatchat.utils.CopyTools;
 import com.chatchat.utils.StringTools;
+import com.chatchat.websocket.ChannelContextUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,8 @@ import java.io.IOException;
 public class UserInfoController extends ABaseController{
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private ChannelContextUtils channelContextUtils;
 
 
     /**
@@ -78,7 +81,8 @@ public class UserInfoController extends ABaseController{
         }
         userInfo.setPassword(StringTools.encodeMD5(newPassword));
         this.userInfoService.updateUserInfoByUserId(userInfo,tokenUserInfoDto.getUserId());
-        // TODO 强制退出登录
+        // 强制退出登录
+        channelContextUtils.closeContext(tokenUserInfoDto.getUserId());
         return getMyUserInfo(request);
     }
 
@@ -92,7 +96,8 @@ public class UserInfoController extends ABaseController{
     public ResponseVO logout(HttpServletRequest request) {
         TokenUserInfoDto tokenUserInfoDto=getTokenUserInfoDto(request);
 
-        // TODO 退出登录 关闭ws连接
+        // 退出登录 关闭ws连接
+        channelContextUtils.closeContext(tokenUserInfoDto.getUserId());
         return getMyUserInfo(request);
     }
 }

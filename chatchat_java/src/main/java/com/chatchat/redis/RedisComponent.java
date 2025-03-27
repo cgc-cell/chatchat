@@ -73,4 +73,7 @@ public class RedisComponent {
         redisUtils.delete(Constants.REDIS_KEY_WS_TOKEN_USERID+userId);
     }
 
+    public void removeUserContact(String userId, String contactId) {
+        redisUtils.remove(Constants.REDIS_KEY_USER_CONTACT+userId,0,contactId);
+    }
 }

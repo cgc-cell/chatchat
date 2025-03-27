@@ -6,6 +6,7 @@ import java.util.List;
 import com.chatchat.annotation.GlobalInterceptor;
 import com.chatchat.entity.dto.TokenUserInfoDto;
 import com.chatchat.entity.enums.GroupStatusEnum;
+import com.chatchat.entity.enums.MessageTypeEnum;
 import com.chatchat.entity.enums.UserContactStatusEnum;
 import com.chatchat.entity.po.UserContact;
 import com.chatchat.entity.query.GroupInfoQuery;
@@ -116,6 +117,34 @@ public class GroupInfoController extends ABaseController {
 
         return getSuccessResponseVO(groupInfoVO);
     }
+
+    @RequestMapping("/addOrRemoveMember")
+    @GlobalInterceptor
+    public ResponseVO addOrRemoveMember(HttpServletRequest request,@NotEmpty String groupId,
+                                        @NotEmpty String selectedMemberIds,
+                                        @NotNull Integer opType){
+        TokenUserInfoDto tokenUserInfoDto=getTokenUserInfoDto(request);
+        groupInfoService.addOrRemoveMember(tokenUserInfoDto,groupId,selectedMemberIds,opType);
+        return getSuccessResponseVO(null);
+    }
+
+    @RequestMapping("/leaveGroup")
+    @GlobalInterceptor
+    public ResponseVO leaveGroup(HttpServletRequest request,@NotEmpty String groupId){
+        TokenUserInfoDto tokenUserInfoDto=getTokenUserInfoDto(request);
+        groupInfoService.leaveGroup(tokenUserInfoDto.getUserId(),groupId, MessageTypeEnum.LEAVE_GROUP);
+        return getSuccessResponseVO(null);
+    }
+
+
+    @RequestMapping("/dissolutionGroup")
+    @GlobalInterceptor
+    public ResponseVO dissolutionGroup(HttpServletRequest request,@NotEmpty String groupId){
+        TokenUserInfoDto tokenUserInfoDto=getTokenUserInfoDto(request);
+        groupInfoService.dissolutionGroup(groupId,tokenUserInfoDto.getUserId());
+        return getSuccessResponseVO(null);
+    }
+
 
 
 }
