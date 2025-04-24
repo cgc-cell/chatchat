@@ -117,7 +117,7 @@ public class ChannelContextUtils {
         wsInitData.setApplyCount(applyCount);
 
         MessageSendDto<WSInitData> messageSendDto= new MessageSendDto<>();
-        messageSendDto.setContactType(MessageTypeEnum.INIT.getType());
+        messageSendDto.setMessageType(MessageTypeEnum.INIT.getType());
         messageSendDto.setExtendData(wsInitData);
         sendMsg(messageSendDto,userId);
 

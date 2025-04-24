@@ -81,10 +81,8 @@ public class StringTools {
             return content;
         }
         content = content.replace("<", "&lt;");
-        content = content.replace(">", "&gt;");
-        content = content.replace("\n\r","<br>");
+        content = content.replace("\r\n","<br>");
         content = content.replace("\n","<br>");
-        content = content.replace("\r","<br>");
         return content;
     }
 

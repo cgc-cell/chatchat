@@ -323,8 +323,7 @@ public class UserContactServiceImpl implements UserContactService {
 		}else{
 			sessionId=StringTools.getChatSessionId4Group(contactId);
 		}
-		List<ChatSessionUser> chatSessionUserList= new ArrayList<>();
-		if(UserContactTypeEnum.USER.getType().equals(contactType)) {
+        if(UserContactTypeEnum.USER.getType().equals(contactType)) {
 			ChatSession chatSession=new ChatSession();
 			chatSession.setSessionId(sessionId);
 			chatSession.setLastMessage(applyInfo);
@@ -358,7 +357,7 @@ public class UserContactServiceImpl implements UserContactService {
 			chatMessage.setSendUserNickName(applyUserInfo.getNickName());
 			chatMessage.setContactType(contactType);
 			chatMessage.setStatus(MessageStatusEnum.SENDED.getStatus());
-			this.chatMessageMapper.insertOrUpdate(chatMessage);
+			this.chatMessageMapper.insert(chatMessage);
 
 			MessageSendDto messageSendDto=CopyTools.copy(chatMessage,MessageSendDto.class);
 			// 发送给接受申请的人
@@ -396,7 +395,7 @@ public class UserContactServiceImpl implements UserContactService {
 			chatMessage.setContactId(contactId);
 			chatMessage.setContactType(contactType);
 			chatMessage.setStatus(MessageStatusEnum.SENDED.getStatus());
-			this.chatMessageMapper.insertOrUpdate(chatMessage);
+			this.chatMessageMapper.insert(chatMessage);
 
 
 			redisComponent.addUserContact(applyUserId,groupInfo.getGroupId());
@@ -480,7 +479,7 @@ public class UserContactServiceImpl implements UserContactService {
 		chatMessage.setContactId(userID);
 		chatMessage.setContactType(UserContactTypeEnum.USER.getType());
 		chatMessage.setStatus(MessageStatusEnum.SENDED.getStatus());
-		chatMessageMapper.insertOrUpdate(chatMessage);
+		chatMessageMapper.insert(chatMessage);
 
 	}
 }

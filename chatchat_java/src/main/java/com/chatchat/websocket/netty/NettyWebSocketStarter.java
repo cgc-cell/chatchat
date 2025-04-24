@@ -28,8 +28,8 @@ import java.util.concurrent.TimeUnit;
 public class NettyWebSocketStarter implements Runnable{
 
     private static final Logger log = LoggerFactory.getLogger(NettyWebSocketStarter.class);
-    private static EventLoopGroup bossGroup=new NioEventLoopGroup(1);
-    private static EventLoopGroup workerGroup=new NioEventLoopGroup();
+    private static final EventLoopGroup bossGroup=new NioEventLoopGroup(1);
+    private static final EventLoopGroup workerGroup=new NioEventLoopGroup();
     @Resource
     private HandlerWebSocket handlerWebSocket;
     @Resource

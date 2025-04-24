@@ -14,14 +14,14 @@ public class Constants {
     public static final String ROBOT_UID = UserContactTypeEnum.USER.getPrefix()+"robot";
     public static final String REDIS_KEY_SYS_SETTING = "chatchat:sys:setting";
     public static final String FILE_FOLDER_FILE = "/file/";
-    public static final String FILE_FOLDER_AVATAR = "/avatar";
+    public static final String FILE_FOLDER_AVATAR = "/avatar/";
     public static final String IMAGE_SUFFIX = ".png";
     public static final String COVER_IMAGE_SUFFIX = "_cover.png";
     public static final String APPLY_INFO_TEMPLATE = "我是%s";
     public static final String APP_UPDATE_FOLDER = "/update/";
     public static final String APP_EXE_SUFFIX = ".exe";
     public static final String APP_NAME = "chatchat_setup";
-    public static final Long REDIS_KEY_EXPIRES_HEART_BEAT=600L;
+    public static final Long REDIS_KEY_EXPIRES_HEART_BEAT=100*6L;
     public static final String REDIS_KEY_USER_CONTACT = "chatchat:ws:user:contact";
     public static final Long REDIS_KEY_TOKEN_EXPIRES=Constants.VERIFY_CODE_TIME_DAY* 5L;
     public static final Long MILLISECOND_3DAY_AGO =365*24*60*60*1000L;

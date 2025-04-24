@@ -29,7 +29,7 @@ public class GlobalOperationAspect {
     @Resource
     RedisUtils redisUtils;
 
-    private static Logger logger = LoggerFactory.getLogger(GlobalInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalInterceptor.class);
 
     @Before("@annotation(com.chatchat.annotation.GlobalInterceptor)")
     public  void interceptorDo(JoinPoint point) {

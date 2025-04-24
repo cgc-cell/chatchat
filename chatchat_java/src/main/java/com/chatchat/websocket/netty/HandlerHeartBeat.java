@@ -29,8 +29,6 @@ public class HandlerHeartBeat extends ChannelDuplexHandler {
             }else if (event.state() == IdleState.WRITER_IDLE) {
                 ctx.writeAndFlush("heart");
             }
-
-
         }
     }
 }

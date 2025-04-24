@@ -17,7 +17,4 @@ public class ChatChatApplication {
     public static void main(String[] args) {
         SpringApplication.run(ChatChatApplication.class,args);
     }
-
-    public static class aaa {
-    }
 }

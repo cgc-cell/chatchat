@@ -237,7 +237,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 			chatMessage.setContactId(groupInfo.getGroupId());
 			chatMessage.setContactType(UserContactTypeEnum.GROUP.getType());
 			chatMessage.setStatus(MessageStatusEnum.SENDED.getStatus());
-			this.chatMessageMapper.insertOrUpdate(chatMessage);
+			this.chatMessageMapper.insert(chatMessage);
 			//将群组添加到联系人
 			redisComponent.addUserContact(groupInfo.getGroupOwnerId(),groupInfo.getGroupId());
 			//将联系人的channel添加到群组
@@ -321,7 +321,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		chatMessage.setContactType(UserContactTypeEnum.GROUP.getType());
 		chatMessage.setStatus(MessageStatusEnum.SENDED.getStatus());
 		chatMessage.setMessageContent(messageContent);
-		this.chatMessageMapper.insertOrUpdate(chatMessage);
+		this.chatMessageMapper.insert(chatMessage);
 
 		MessageSendDto messageSendDto = CopyTools.copy(chatMessage, MessageSendDto.class);
 		messageHandler.sendMessage(messageSendDto);
@@ -375,7 +375,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 		chatMessage.setMessageContent(messageContent);
 		chatMessage.setMessageType(messageTypeEnum.getType());
 		chatMessage.setContactId(groupId);
-		this.chatMessageMapper.insertOrUpdate(chatMessage);
+		this.chatMessageMapper.insert(chatMessage);
 
 		UserContactQuery userContactQuery=new UserContactQuery();
 		userContactQuery.setContactId(groupId);
