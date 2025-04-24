@@ -27,6 +27,7 @@ import com.chatchat.redis.RedisUtils;
 import com.chatchat.service.ChatSessionUserService;
 import com.chatchat.service.UserContactService;
 import com.chatchat.utils.CopyTools;
+import com.chatchat.websocket.MessageHandler;
 import jodd.util.ArraysUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +66,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 	private UserContactService userContactService;
 	@Resource
 	private ChatSessionUserService chatSessionUserService;
+    @Autowired
+    private MessageHandler messageHandler;
 
 	/**
 	 * 根据条件查询列表
@@ -314,7 +317,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 	@Override
 	public void forceOffLine(String userId) {
-		// TODO 强制下线
+		// 强制下线
+		MessageSendDto messageSendDto=new MessageSendDto();
+		messageSendDto.setContactId(userId);
+		messageSendDto.setMessageType(MessageTypeEnum.FORCE_OFFlINE.getType());
+		messageSendDto.setContactType(UserContactTypeEnum.USER.getType());
+		messageHandler.sendMessage(messageSendDto);
 	}
 
 	private TokenUserInfoDto getTokenUserInfoDto(UserInfo userInfo) {

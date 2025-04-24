@@ -1,0 +1,86 @@
+diff --git a/node_modules/element-plus/theme-chalk/src/common/var.scss b/node_modules/element-plus/theme-chalk/src/common/var.scss
+index d5c4a1b..2f143e6 100644
+--- a/node_modules/element-plus/theme-chalk/src/common/var.scss
++++ b/node_modules/element-plus/theme-chalk/src/common/var.scss
+@@ -1,6 +1,9 @@
+ /* Element Chalk Variables */
+ @use 'sass:math';
+ @use 'sass:map';
++@use "sass:color"; // 添加这一行
++
++// 其他内容...
+ 
+ @use '../mixins/function.scss' as *;
+ 
+@@ -60,7 +63,7 @@ $color-info: map.get($colors, 'info', 'base') !default;
+     (
+       $type: (
+         '#{$mode}-#{$number}':
+-          mix(
++        color.mix(
+             $mix-color,
+             map.get($colors, $type, 'base'),
+             math.percentage(math.div($number, 10))
+diff --git a/node_modules/element-plus/theme-chalk/src/mixins/function.scss b/node_modules/element-plus/theme-chalk/src/mixins/function.scss
+index c6c449c..5f0f7ef 100644
+--- a/node_modules/element-plus/theme-chalk/src/mixins/function.scss
++++ b/node_modules/element-plus/theme-chalk/src/mixins/function.scss
+@@ -1,16 +1,18 @@
+ @use 'config';
+-
++@use "sass:meta";
++@use "sass:string";
++@use "sass:color";
+ // BEM support Func
+ @function selectorToString($selector) {
+-  $selector: inspect($selector);
+-  $selector: str-slice($selector, 2, -2);
++  $selector: meta.inspect($selector);
++  $selector: string.slice($selector, 2, -2);
+   @return $selector;
+ }
+ 
+ @function containsModifier($selector) {
+   $selector: selectorToString($selector);
+ 
+-  @if str-index($selector, config.$modifier-separator) {
++  @if string-index($selector, config.$modifier-separator) {
+     @return true;
+   } @else {
+     @return false;
+@@ -20,7 +22,7 @@
+ @function containWhenFlag($selector) {
+   $selector: selectorToString($selector);
+ 
+-  @if str-index($selector, '.' + config.$state-prefix) {
++  @if string-index($selector, '.' + config.$state-prefix) {
+     @return true;
+   } @else {
+     @return false;
+diff --git a/node_modules/element-plus/theme-chalk/src/mixins/mixins.scss b/node_modules/element-plus/theme-chalk/src/mixins/mixins.scss
+index f45df0b..f27932c 100644
+--- a/node_modules/element-plus/theme-chalk/src/mixins/mixins.scss
++++ b/node_modules/element-plus/theme-chalk/src/mixins/mixins.scss
+@@ -5,12 +5,20 @@
+ @forward 'function';
+ @forward '_var';
+ @use 'config' as *;
++@use "sass:math";
++@use "sass:color";
++@use "sass:map";
++@use "sass:string"; // 添加这一行
++@use "sass:meta";   // 如果使用了 meta.inspect 等
++
++$B: null;
++$E: null;
+ 
+ // Break-points
+ @mixin res($key, $map: $breakpoints) {
+   // loop breakpoint Map, return if present
+-  @if map-has-key($map, $key) {
+-    @media only screen and #{unquote(map-get($map, $key))} {
++  @if map.has-key($map, $key) {
++    @media only screen and #{string.unquote(map.get($map, $key))} {
+       @content;
+     }
+   } @else {

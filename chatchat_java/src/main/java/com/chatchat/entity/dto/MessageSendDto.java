@@ -5,7 +5,6 @@ import com.chatchat.utils.StringTools;
 import java.io.Serializable;
 
 public class MessageSendDto<T> implements Serializable {
-    private static final Long serialVersionUID = 1L;
 
     private Long messageId;
 
@@ -24,7 +23,7 @@ public class MessageSendDto<T> implements Serializable {
     private  Integer status;
     private Long fileSize;
     private String fileName;
-    private String fileType;
+    private Integer fileType;
     private Integer memberCount;
 
     public Long getMessageId() {
@@ -150,11 +149,11 @@ public class MessageSendDto<T> implements Serializable {
         this.fileName = fileName;
     }
 
-    public String getFileType() {
+    public Integer getFileType() {
         return fileType;
     }
 
-    public void setFileType(String fileType) {
+    public void setFileType(Integer fileType) {
         this.fileType = fileType;
     }
 

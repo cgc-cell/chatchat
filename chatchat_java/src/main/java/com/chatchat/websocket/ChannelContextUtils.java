@@ -117,7 +117,7 @@ public class ChannelContextUtils {
         wsInitData.setApplyCount(applyCount);
 
         MessageSendDto<WSInitData> messageSendDto= new MessageSendDto<>();
-        messageSendDto.setContactType(MessageTypeEnum.INIT.getType());
+        messageSendDto.setMessageType(MessageTypeEnum.INIT.getType());
         messageSendDto.setExtendData(wsInitData);
         sendMsg(messageSendDto,userId);
 
@@ -178,11 +178,26 @@ public class ChannelContextUtils {
         if(StringTools.isEmpty(messageSendDto.getContactId())){
             return;
         }
-        ChannelGroup group=GROUP_CONTEXT_MAP.get(messageSendDto.getContactId());
-        if(group == null){
+        ChannelGroup channelGroup=GROUP_CONTEXT_MAP.get(messageSendDto.getContactId());
+        if(channelGroup == null){
             return;
         }
-        group.writeAndFlush(new TextWebSocketFrame(JsonUtils.convertObj2Json(messageSendDto)));
+        channelGroup.writeAndFlush(new TextWebSocketFrame(JsonUtils.convertObj2Json(messageSendDto)));
+
+        MessageTypeEnum messageTypeEnum = MessageTypeEnum.getByType(messageSendDto.getMessageType());
+        if(MessageTypeEnum.LEAVE_GROUP.equals(messageTypeEnum)||MessageTypeEnum.REMOVE_GROUP.equals(messageTypeEnum)){
+            String userId= (String) messageSendDto.getExtendData();
+            redisComponent.removeUserContact(userId,messageSendDto.getContactId());
+            Channel channel  = USER_CONTEXT_MAP.get(userId);
+            if(channel == null) {
+                return;
+            }
+            channelGroup.remove(channel);
+        }
+        if(MessageTypeEnum.DISSOLUTION_GROUP.equals(messageTypeEnum)){
+            GROUP_CONTEXT_MAP.remove(messageSendDto.getContactId());
+            channelGroup.close();
+        }
     }
     /**
      * 发送消息

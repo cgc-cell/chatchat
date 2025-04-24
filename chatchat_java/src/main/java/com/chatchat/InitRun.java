@@ -37,7 +37,7 @@ public class InitRun implements ApplicationRunner {
         }catch (SQLException e){
             logger.error("数据库配置错误，请检测数据库配置");
         }catch (Exception e){
-            logger.error("服务启动一场，错误信息：{}", e.getMessage());
+            logger.error("服务启动异常，错误信息：{}", e.getMessage());
         }
     }
 }
