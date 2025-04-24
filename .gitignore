@@ -2,7 +2,7 @@
 /chatchat_client/dist/
 /chatchat_client/out/
 /chatchat_client/assets/
+/chatchat_client/*.log*
 /chatchat_java/target/
-/easyjava/target/
 /chatchat_java/.idea/
 /.idea/
