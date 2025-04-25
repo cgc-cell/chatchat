@@ -6,8 +6,3 @@
 /chatchat_java/target/
 /chatchat_java/.idea/
 /.idea/
-/chatchat_client/node_modules/
-/chatchat_client/dist/
-/chatchat_client/out/
-/chatchat_client/assets/
-/chatchat_client/*.log*
